@@ -35,7 +35,6 @@
   <ItemGroup>
     <Folder Include="Models\Dto\" />
     <Folder Include="Models\Response\" />
-    <Folder Include="Models\Request\" />
   </ItemGroup>
 
 </Project>

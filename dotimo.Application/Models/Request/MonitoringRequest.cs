@@ -1,14 +1,16 @@
 ﻿using dotimo.Data.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace dotimo.Data.Entities
+namespace dotimo.Application.Models.Request
 {
-    public class Watch : BaseEntity
+    public class MonitoringRequest
     {
         [Required]
-        [StringLength(25)]
+        [StringLength(100)]
         public string Name { get; set; }
 
         [Required]
@@ -21,8 +23,7 @@ namespace dotimo.Data.Entities
 
         public MonitoringTimePeriod MonitoringTimePeriod { get; set; }
 
-        [ForeignKey("User")]
-        public Guid UserId { get; set; }
-        public User User { get; set; }
+        public int MonitoringTimePeriodId { get; set; }
+
     }
 }

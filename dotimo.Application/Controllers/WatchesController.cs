@@ -73,11 +73,17 @@ namespace dotimo.Application
         // POST: Watches/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,UrlString,Email,MonitoringTimePeriod,MonitoringTimePeriodId,UserId,Id,CreatedDate,UpdatedDate,IsActive")] Watch watch)
+        public async Task<IActionResult> Create([Bind("Name,UrlString,Email,MonitoringTimePeriod")] Watch watch)
         {
             if (ModelState.IsValid)
             {
+                var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
+
                 watch.Id = Guid.NewGuid();
+                watch.UserId = user.Id;
+                watch.IsActive = true;
+                watch.UpdatedDate = DateTime.Now;
+
                 await _watchService.CreateAsync(watch);
                 return RedirectToAction(nameof(Index));
             }
