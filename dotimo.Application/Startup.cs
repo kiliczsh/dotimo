@@ -1,5 +1,6 @@
 using AutoMapper;
 using dotimo.Business;
+using dotimo.Business.IServices;
 using dotimo.Business.Services;
 using dotimo.Core;
 using dotimo.Core.Repositories;
@@ -41,6 +42,7 @@ namespace dotimo.Application
             services.AddScoped(typeof(IService<>), typeof(Service<>));
             services.AddScoped<IUnitOfWork<Watch>, UnitOfWork<Watch>>();
             services.AddScoped<IWatchService, WatchService>();
+            services.AddScoped<IHangfireService,HangfireService> ();
 
             // Automapper
             MapperConfiguration mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new Mapping.MappingProfile()));
@@ -83,6 +85,7 @@ namespace dotimo.Application
 
             //hangfire
             app.UseHangfireDashboard();
+            RecurringJob.AddOrUpdate<IHangfireService>(options => options.CreateRecurringJobsAsync(), Cron.Minutely);
 
             app.UseEndpoints(endpoints =>
             {

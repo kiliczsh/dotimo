@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="1.7.13" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\dotimo.Core\dotimo.Core.csproj" />
   </ItemGroup>
 
