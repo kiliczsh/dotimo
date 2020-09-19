@@ -1,4 +1,5 @@
-﻿using dotimo.Data.Context;
+﻿using dotimo.Core.Repositories;
+using dotimo.Data.Context;
 using System.Threading.Tasks;
 
 namespace dotimo.Core
@@ -16,7 +17,7 @@ namespace dotimo.Core
 
         public IRepository<TEntity> GetRepository()
         {
-            return repository;
+            return repository ?? new Repository<TEntity>(_dbContext);
         }
 
         public void SetRepository(IRepository<TEntity> value)

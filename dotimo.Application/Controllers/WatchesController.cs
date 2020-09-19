@@ -1,5 +1,6 @@
 ﻿using dotimo.Business.Services;
 using dotimo.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace dotimo.Application
 {
+    [Authorize]
     public class WatchesController : Controller
     {
         private readonly IWatchService _watchService;
@@ -31,7 +33,6 @@ namespace dotimo.Application
         public IActionResult Index()
         {
             IEnumerable<Watch> watches;
-
             try
             {
                 var user = _userManager.FindByNameAsync(User.Identity.Name).Result;

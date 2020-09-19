@@ -44,7 +44,8 @@ namespace dotimo.Business.Services
 
         public IEnumerable<Watch> GetAllByUserId(Guid userId)
         {
-            return _unitOfWork.GetRepository().Find(w => w.UserId == userId).ToList();
+            var watches = _unitOfWork.GetRepository().Find(w => w.UserId == userId).ToList();
+            return watches != null ? new List<Watch>() : watches;
         }
 
         public async Task<Watch> GetByGuidAsync(Guid guid)
