@@ -12,6 +12,5 @@ namespace dotimo.Data.Context
 
         public DbSet<Watch> Watches { get; set; }
         public DbSet<CheckUp> CheckUps { get; set; }
-        public DbSet<MonitoringRequest> MonitoringRequests { get; set; }
     }
 }
