@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\dotimo.Core\dotimo.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using dotimo.Business;
+using dotimo.Business.Services;
+using dotimo.Core;
+using dotimo.Core.Repositories;
+using dotimo.Data.Context;
+using dotimo.Data.Entities;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using dotimo.Application.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,18 +26,33 @@ namespace dotimo.Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<DotimoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DotimoDbContext>();
+
+
             services.AddControllersWithViews();
+
+            services.AddScoped(typeof(DbContext), typeof(DotimoDbContext));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IService<>), typeof(Service<>));
+
             services.AddRazorPages();
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+            {
+                DotimoDbContext context = serviceScope.ServiceProvider.GetService<DotimoDbContext>();
+
+                context.Database.Migrate();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
