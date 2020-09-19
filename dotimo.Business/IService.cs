@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace dotimo.Business
 {
     public interface IService<T>
     {
-        IEnumerable<T> GetAll();
+        Task<T> CreateAsync(T t);
 
-        T GetById(Guid id);
+        Task DeleteAsync(T t);
 
-        T Add(T entity);
+        Task<IEnumerable<T>> GetAllAsync();
+
+        Task<T> GetByIdAsync(int id);
     }
 }

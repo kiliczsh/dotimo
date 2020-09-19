@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace dotimo.Core.Repositories
 {
@@ -16,20 +18,44 @@ namespace dotimo.Core.Repositories
             Dbset = DbContext.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task AddAsync(TEntity entity)
         {
-            return Dbset.AsEnumerable();
+            await Dbset.AddAsync(entity);
         }
 
-        public TEntity GetById(Guid id)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            return Dbset.Find(id);
+            await Dbset.AddRangeAsync(entities);
         }
 
-        public TEntity Add(TEntity entity)
+        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            Dbset.Add(entity);
-            return entity;
+            return Dbset.Where(predicate);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await Dbset.ToListAsync();
+        }
+
+        public ValueTask<TEntity> GetByIdAsync(int id)
+        {
+            return Dbset.FindAsync(id);
+        }
+
+        public void Remove(TEntity entity)
+        {
+            Dbset.Remove(entity);
+        }
+
+        public void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            Dbset.RemoveRange(entities);
+        }
+
+        public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return Dbset.SingleOrDefaultAsync(predicate);
         }
     }
 }

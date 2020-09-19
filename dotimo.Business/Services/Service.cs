@@ -1,31 +1,39 @@
 ﻿using dotimo.Core;
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace dotimo.Business.Services
 {
     public class Service<T> : IService<T> where T : class, new()
     {
-        public IRepository<T> Repository { get; set; }
+        private readonly IUnitOfWork<T> _unitOfWork;
 
-        public Service(IRepository<T> repository)
+        public Service(IUnitOfWork<T> unitOfWork)
         {
-            Repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
-        public T Add(T entity)
+        public async Task<T> CreateAsync(T t)
         {
-            return Repository.Add(entity);
+            await _unitOfWork.GetRepository().AddAsync(t);
+            await _unitOfWork.CommitAsync();
+            return t;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task DeleteAsync(T t)
         {
-            return Repository.GetAll();
+            _unitOfWork.GetRepository().Remove(t);
+            await _unitOfWork.CommitAsync();
         }
 
-        public T GetById(Guid id)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return Repository.GetById(id);
+            return await _unitOfWork.GetRepository().GetAllAsync();
+        }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _unitOfWork.GetRepository().GetByIdAsync(id);
         }
     }
 }
