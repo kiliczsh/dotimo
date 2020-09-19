@@ -5,6 +5,7 @@ using dotimo.Core;
 using dotimo.Core.Repositories;
 using dotimo.Data.Context;
 using dotimo.Data.Entities;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,10 @@ namespace dotimo.Application
             MapperConfiguration mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new Mapping.MappingProfile()));
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            //hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfireServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +80,9 @@ namespace dotimo.Application
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //hangfire
+            app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
             {
