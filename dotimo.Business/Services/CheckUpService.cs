@@ -8,60 +8,61 @@ using System.Threading.Tasks;
 
 namespace dotimo.Business.Services
 {
-    public class WatchService : IWatchService
+    public class CheckUpService : ICheckUpService
     {
-        private readonly IUnitOfWork<Watch> _unitOfWork;
+        private readonly IUnitOfWork<CheckUp> _unitOfWork;
 
-        public WatchService(IUnitOfWork<Watch> unitOfWork)
+        public CheckUpService(IUnitOfWork<CheckUp> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Watch> CreateAsync(Watch watch)
+        public async Task<CheckUp> CreateAsync(CheckUp checkUp)
         {
-            await _unitOfWork.GetRepository().AddAsync(watch);
+            checkUp.IsActive = true;
+            await _unitOfWork.GetRepository().AddAsync(checkUp);
             await _unitOfWork.CommitAsync();
-            return watch;
+            return checkUp;
         }
 
-        public async Task DeleteAsync(Watch watch)
+        public async Task DeleteAsync(CheckUp checkUp)
         {
-            _unitOfWork.GetRepository().Remove(watch);
+            _unitOfWork.GetRepository().Remove(checkUp);
             await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteByIdAsync(Guid id)
         {
-            var watch = await _unitOfWork.GetRepository().GetByGuidAsync(id);
-            watch.IsActive = false;
-            _unitOfWork.GetRepository().Update(watch);
+            var checkUp = await _unitOfWork.GetRepository().GetByGuidAsync(id);
+            checkUp.IsActive = false;
+            _unitOfWork.GetRepository().Update(checkUp);
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<IEnumerable<Watch>> GetAllAsync()
+        public async Task<IEnumerable<CheckUp>> GetAllAsync()
         {
             return await _unitOfWork.GetRepository().GetAllAsync();
         }
 
-        public IEnumerable<Watch> GetAllByUserId(Guid userId)
+        public IEnumerable<CheckUp> GetAllByWatchId(Guid id)
         {
-            var watches = _unitOfWork.GetRepository().Find(w => w.UserId == userId && w.IsActive).ToList();
-            return watches ?? new List<Watch>();
+            var checkUps = _unitOfWork.GetRepository().Find(w => w.WatchId == id && w.IsActive).ToList();
+            return checkUps ?? new List<CheckUp>();
         }
 
-        public async Task<Watch> GetByGuidAsync(Guid guid)
+        public async Task<CheckUp> GetByGuidAsync(Guid guid)
         {
             return await _unitOfWork.GetRepository().GetByGuidAsync(guid);
         }
 
-        public async Task<Watch> GetByIdAsync(int id)
+        public async Task<CheckUp> GetByIdAsync(int id)
         {
             return await _unitOfWork.GetRepository().GetByIdAsync(id);
         }
 
-        public async Task UpdateAsync(Watch watch)
+        public async Task UpdateAsync(CheckUp checkUp)
         {
-            _unitOfWork.GetRepository().Update(watch);
+            _unitOfWork.GetRepository().Update(checkUp);
             await _unitOfWork.CommitAsync();
         }
 

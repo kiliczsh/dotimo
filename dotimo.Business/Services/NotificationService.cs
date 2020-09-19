@@ -20,11 +20,11 @@ namespace dotimo.Business.Services
         {
             try
             {
-                _logger.LogInformation("Email sent!");
+                _logger.LogInformation(" NotificationService | Email sent!");
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Email failed!");
+                _logger.LogInformation(" NotificationService | Email failed!");
             }
         }
     }

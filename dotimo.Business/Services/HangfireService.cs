@@ -1,6 +1,7 @@
 ﻿using dotimo.Business.IServices;
 using dotimo.Core;
 using dotimo.Data.Entities;
+using dotimo.Data.Models;
 using Hangfire;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using dotimo.Data.Models;
 
 namespace dotimo.Business.Services
 {
@@ -18,13 +18,15 @@ namespace dotimo.Business.Services
         private readonly IWatchService _watchService;
         private readonly ILogger<HangfireService> _logger;
         private readonly INotificationService _notificationService;
+        private readonly ICheckUpService _checkUpService;
 
-        public HangfireService(IUnitOfWork<Watch> unitOfWork, IWatchService watchService, ILogger<HangfireService> logger, INotificationService notificationService)
+        public HangfireService(IUnitOfWork<Watch> unitOfWork, IWatchService watchService, ILogger<HangfireService> logger, INotificationService notificationService, ICheckUpService checkUpService)
         {
             _unitOfWork = unitOfWork;
             _watchService = watchService;
             _logger = logger;
             _notificationService = notificationService;
+            _checkUpService = checkUpService;
         }
 
         public async Task CreateRecurringJobsAsync()
@@ -61,28 +63,39 @@ namespace dotimo.Business.Services
 
                 var response = await client.GetAsync(watch.UrlString);
 
-                CheckUp checkUp = new CheckUp
-                {
-                    StatusCode = (short)response.StatusCode,
-                    UpdatedDate = DateTime.Now
-                };
+                var isStatusCodeSuccess = true;
 
                 if ((response.StatusCode >= (HttpStatusCode)300) || (response.StatusCode < (HttpStatusCode)200))
                 {
                     _logger.LogInformation(string.Format(" Hangfire Service | SendRequestAsync | Ping Failed! URL: {0}  STATUS: {1}",
                         watch.UrlString, response.StatusCode.ToString()));
-                    _notificationService.Send(new Notification());
-                    return false;
+                    isStatusCodeSuccess = false;
+                    var notification = CreateNotification();
+                    _notificationService.Send(notification);
                 }
 
+                CheckUp checkUp = new CheckUp
+                {
+                    StatusCode = (short)response.StatusCode,
+                    UpdatedDate = DateTime.Now,
+                    Success = isStatusCodeSuccess,
+                    WatchId = watch.Id
+                };
+                var checkUpDb = await _checkUpService.CreateAsync(checkUp);
             }
             catch (Exception ex)
             {
                 _logger.LogError(string.Format(" Hangfire Service | SendRequestAsync | Request Failed! URL: {0}, ExceptionMessage: {1}", watch.UrlString, ex.Message));
-                _notificationService.Send(new Notification());
+                var notification = CreateNotification();
+                _notificationService.Send(notification);
                 throw;
             }
             return true;
+        }
+
+        private Notification CreateNotification()
+        {
+            return new Notification();
         }
 
         public bool PingUrl(Watch watch)
