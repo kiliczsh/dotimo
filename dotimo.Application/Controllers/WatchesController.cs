@@ -1,14 +1,13 @@
-﻿using dotimo.Business.Services;
+﻿using AutoMapper;
+using dotimo.Business.Services;
 using dotimo.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace dotimo.Application
@@ -19,13 +18,14 @@ namespace dotimo.Application
         private readonly IWatchService _watchService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public WatchesController(IWatchService watchService, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+        public WatchesController(IWatchService watchService, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IMapper mapper)
         {
             _watchService = watchService;
-
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         // GET: Watches

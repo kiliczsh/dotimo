@@ -1,3 +1,4 @@
+using AutoMapper;
 using dotimo.Business;
 using dotimo.Business.Services;
 using dotimo.Core;
@@ -6,7 +7,6 @@ using dotimo.Data.Context;
 using dotimo.Data.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,19 +30,21 @@ namespace dotimo.Application
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DotimoDbContext>();
 
-
             services.AddControllersWithViews();
 
+            services.AddRazorPages();
+
+            //IoC
             services.AddScoped(typeof(DbContext), typeof(DotimoDbContext));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<>), typeof(Service<>));
             services.AddScoped<IUnitOfWork<Watch>, UnitOfWork<Watch>>();
             services.AddScoped<IWatchService, WatchService>();
 
-            services.AddRazorPages();
-
-
-
+            // Automapper
+            MapperConfiguration mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new Mapping.MappingProfile()));
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
