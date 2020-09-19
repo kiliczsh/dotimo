@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using dotimo.Application.Models.Request;
 using dotimo.Business.Services;
 using dotimo.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -109,9 +110,10 @@ namespace dotimo.Application
         // POST: Watches/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,UrlString,Email,MonitoringTimePeriod,MonitoringTimePeriodId,UserId,Id,CreatedDate,UpdatedDate,IsActive")] Watch watch)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id, Name,UrlString,Email,MonitoringTimePeriod")] WatchEditRequest watchRequest)
         {
-            if (id != watch.Id)
+            Watch watch = null;
+            if (id != watchRequest.Id)
             {
                 return NotFound();
             }
@@ -120,11 +122,19 @@ namespace dotimo.Application
             {
                 try
                 {
-                    await _watchService.UpdateAsync(watch);
+                    var watchDb = _watchService.GetByGuidAsync(watchRequest.Id).Result;
+                    watchDb.Name = watchRequest.Name;
+                    watchDb.UrlString = watchRequest.UrlString;
+                    watchDb.MonitoringTimePeriod = watchRequest.MonitoringTimePeriod;
+                    watchDb.Email = watchRequest.Email;
+                    watchDb.UpdatedDate = DateTime.Now;
+
+                    await _watchService.UpdateAsync(watchDb);
+                    watch = watchDb;
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WatchExists(watch.Id))
+                    if (!WatchExists(watchRequest.Id))
                     {
                         return NotFound();
                     }
@@ -147,9 +157,9 @@ namespace dotimo.Application
                 return NotFound();
             }
 
-            await _watchService.DeleteByIdAsync((Guid)id);
+            var watch = await _watchService.GetByGuidAsync((Guid)id);
 
-            return View();
+            return View(watch);
         }
 
         // POST: Watches/Delete/5

@@ -80,7 +80,7 @@ namespace dotimo.Application
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Watches}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
