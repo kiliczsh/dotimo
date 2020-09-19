@@ -36,6 +36,8 @@ namespace dotimo.Application
             services.AddScoped(typeof(DbContext), typeof(DotimoDbContext));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<>), typeof(Service<>));
+            services.AddScoped<IUnitOfWork<Watch>, UnitOfWork<Watch>>();
+            services.AddScoped<IWatchService, WatchService>();
 
             services.AddRazorPages();
 

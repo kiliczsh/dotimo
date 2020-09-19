@@ -15,11 +15,17 @@ namespace dotimo.Core
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 
+        ValueTask<TEntity> GetByGuidAsync(Guid guid);
+
         ValueTask<TEntity> GetByIdAsync(int id);
         void Remove(TEntity entity);
 
         void RemoveRange(IEnumerable<TEntity> entities);
 
         Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
+        void Update(TEntity entity);
+
+        void UpdateRange(IEnumerable<TEntity> entities);
     }
 }

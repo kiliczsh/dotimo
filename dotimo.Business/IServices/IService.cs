@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace dotimo.Business
@@ -11,6 +12,9 @@ namespace dotimo.Business
 
         Task<IEnumerable<T>> GetAllAsync();
 
+        Task<T> GetByGuidAsync(Guid guid);
+
         Task<T> GetByIdAsync(int id);
+        Task UpdateAsync(T t);
     }
 }

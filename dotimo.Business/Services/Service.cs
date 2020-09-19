@@ -1,4 +1,5 @@
 ﻿using dotimo.Core;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,6 +35,17 @@ namespace dotimo.Business.Services
         public async Task<T> GetByIdAsync(int id)
         {
             return await _unitOfWork.GetRepository().GetByIdAsync(id);
+        }
+
+        public async Task<T> GetByGuidAsync(Guid guid)
+        {
+            return await _unitOfWork.GetRepository().GetByGuidAsync(guid);
+        }
+
+        public async Task UpdateAsync(T t)
+        {
+            _unitOfWork.GetRepository().Update(t);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

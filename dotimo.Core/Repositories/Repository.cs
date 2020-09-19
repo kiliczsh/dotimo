@@ -38,11 +38,15 @@ namespace dotimo.Core.Repositories
             return await Dbset.ToListAsync();
         }
 
+        public ValueTask<TEntity> GetByGuidAsync(Guid guid)
+        {
+            return Dbset.FindAsync(guid);
+        }
+
         public ValueTask<TEntity> GetByIdAsync(int id)
         {
             return Dbset.FindAsync(id);
         }
-
         public void Remove(TEntity entity)
         {
             Dbset.Remove(entity);
@@ -56,6 +60,16 @@ namespace dotimo.Core.Repositories
         public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return Dbset.SingleOrDefaultAsync(predicate);
+        }
+
+        public void Update(TEntity entity)
+        {
+            Dbset.Update(entity);
+        }
+
+        public void UpdateRange(IEnumerable<TEntity> entities)
+        {
+            Dbset.UpdateRange(entities);
         }
     }
 }
