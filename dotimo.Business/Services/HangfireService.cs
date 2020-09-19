@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using dotimo.Data.Models;
 
 namespace dotimo.Business.Services
 {
@@ -16,12 +17,14 @@ namespace dotimo.Business.Services
         private readonly IUnitOfWork<Watch> _unitOfWork;
         private readonly IWatchService _watchService;
         private readonly ILogger<HangfireService> _logger;
+        private readonly INotificationService _notificationService;
 
-        public HangfireService(IUnitOfWork<Watch> unitOfWork, IWatchService watchService, ILogger<HangfireService> logger)
+        public HangfireService(IUnitOfWork<Watch> unitOfWork, IWatchService watchService, ILogger<HangfireService> logger, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _watchService = watchService;
             _logger = logger;
+            _notificationService = notificationService;
         }
 
         public async Task CreateRecurringJobsAsync()
@@ -68,6 +71,7 @@ namespace dotimo.Business.Services
                 {
                     _logger.LogInformation(string.Format(" Hangfire Service | SendRequestAsync | Ping Failed! URL: {0}  STATUS: {1}",
                         watch.UrlString, response.StatusCode.ToString()));
+                    _notificationService.Send(new Notification());
                     return false;
                 }
 
@@ -75,6 +79,7 @@ namespace dotimo.Business.Services
             catch (Exception ex)
             {
                 _logger.LogError(string.Format(" Hangfire Service | SendRequestAsync | Request Failed! URL: {0}, ExceptionMessage: {1}", watch.UrlString, ex.Message));
+                _notificationService.Send(new Notification());
                 throw;
             }
             return true;

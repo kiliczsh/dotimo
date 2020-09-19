@@ -42,7 +42,8 @@ namespace dotimo.Application
             services.AddScoped(typeof(IService<>), typeof(Service<>));
             services.AddScoped<IUnitOfWork<Watch>, UnitOfWork<Watch>>();
             services.AddScoped<IWatchService, WatchService>();
-            services.AddScoped<IHangfireService,HangfireService> ();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IHangfireService, HangfireService>();
 
             // Automapper
             MapperConfiguration mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new Mapping.MappingProfile()));
