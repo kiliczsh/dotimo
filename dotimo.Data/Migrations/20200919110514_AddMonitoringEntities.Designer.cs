@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotimo.Data.Context;
 
 namespace dotimo.Data.Migrations
 {
     [DbContext(typeof(DotimoDbContext))]
-    partial class DotimoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200919110514_AddMonitoringEntities")]
+    partial class AddMonitoringEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,8 +175,6 @@ namespace dotimo.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("WatchId");
 
                     b.ToTable("CheckUps");
                 });
@@ -386,15 +386,6 @@ namespace dotimo.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("dotimo.Data.Entities.CheckUp", b =>
-                {
-                    b.HasOne("dotimo.Data.Entities.Watch", "Watch")
-                        .WithMany()
-                        .HasForeignKey("WatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("dotimo.Data.Entities.MonitoringRequest", b =>
                 {
                     b.HasOne("dotimo.Data.Entities.User", "User")
@@ -407,7 +398,7 @@ namespace dotimo.Data.Migrations
             modelBuilder.Entity("dotimo.Data.Entities.Watch", b =>
                 {
                     b.HasOne("dotimo.Data.Entities.User", "User")
-                        .WithMany("Watches")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

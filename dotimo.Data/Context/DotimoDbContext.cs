@@ -10,6 +10,8 @@ namespace dotimo.Data.Context
     {
         public DotimoDbContext(DbContextOptions<DotimoDbContext> options) : base(options) { }
 
-        public DbSet<BaseEntity> BaseEntities { get; set; }
+        public DbSet<Watch> Watches { get; set; }
+        public DbSet<CheckUp> CheckUps { get; set; }
+        public DbSet<MonitoringRequest> MonitoringRequests { get; set; }
     }
 }
