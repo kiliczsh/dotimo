@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace dotimo.Application
@@ -20,13 +22,16 @@ namespace dotimo.Application
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly ILogger<WatchesController> _logger;
 
-        public WatchesController(IWatchService watchService, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, IMapper mapper)
+        public WatchesController(IWatchService watchService, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager,
+            IMapper mapper, ILogger<WatchesController> logger)
         {
             _watchService = watchService;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // GET: Watches
@@ -38,6 +43,7 @@ namespace dotimo.Application
             {
                 var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
                 watches = _watchService.GetAllByUserId(user.Id);
+                _logger.LogInformation(string.Format("User Email: {0} Total Watchs: {1}",user.Email,watches.Count()));
             }
             catch (Exception ex)
             {
