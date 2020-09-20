@@ -1,9 +1,5 @@
 using AutoMapper;
-using dotimo.Business;
 using dotimo.Business.IServices;
-using dotimo.Business.Services;
-using dotimo.Core;
-using dotimo.Core.Repositories;
 using dotimo.Data.Context;
 using dotimo.Data.Entities;
 using Hangfire;
@@ -37,15 +33,7 @@ namespace dotimo.Application
             services.AddRazorPages();
 
             //IoC
-            services.AddScoped(typeof(DbContext), typeof(DotimoDbContext));
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IService<>), typeof(Service<>));
-            services.AddScoped<IUnitOfWork<Watch>, UnitOfWork<Watch>>();
-            services.AddScoped<IWatchService, WatchService>();
-            services.AddScoped<INotificationService, EmailService>();
-            services.AddScoped<IHangfireService, HangfireService>();
-            services.AddScoped<IUnitOfWork<CheckUp>, UnitOfWork<CheckUp>>();
-            services.AddScoped<ICheckUpService, CheckUpService>();
+            services.RegisterDependencies();
 
             // Automapper
             MapperConfiguration mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new Mapping.MappingProfile()));
