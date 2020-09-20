@@ -6,15 +6,7 @@ namespace dotimo.Application.Mapping
     {
         public MappingProfile()
         {
-            // Domain to Resource
-            //CreateMap<Music, MusicResource>();
-            //CreateMap<Artist, ArtistResource>();
-
-            // Resource to Domain
-            //CreateMap<MusicResource, Music>();
-            //CreateMap<SaveMusicResource, Music>();
-            //CreateMap<ArtistResource, Artist>();
-            //CreateMap<SaveArtistResource, Artist>();
+            //CreateMap<T1, T2>();
         }
     }
 }
