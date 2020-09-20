@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotimo.Data", "dotimo.Data\dotimo.Data.csproj", "{9291FA03-185B-4F9A-AECE-22A2053289D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotimo.Data", "dotimo.Data\dotimo.Data.csproj", "{9291FA03-185B-4F9A-AECE-22A2053289D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotimo.Business", "dotimo.Business\dotimo.Business.csproj", "{0F295B3E-E287-4356-9087-1FE09F66D25A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotimo.Business", "dotimo.Business\dotimo.Business.csproj", "{0F295B3E-E287-4356-9087-1FE09F66D25A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotimo.Core", "dotimo.Core\dotimo.Core.csproj", "{5910C8FE-928F-4118-800E-41B61F566E42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotimo.Core", "dotimo.Core\dotimo.Core.csproj", "{5910C8FE-928F-4118-800E-41B61F566E42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotimo.Application", "dotimo.Application\dotimo.Application.csproj", "{9FC8EB70-E8C3-42BE-84D8-1AB31D984167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotimo.Application", "dotimo.Application\dotimo.Application.csproj", "{9FC8EB70-E8C3-42BE-84D8-1AB31D984167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotimo.Tests", "dotimo.Tests\dotimo.Tests.csproj", "{B0A9C322-71FA-4817-838D-009238E08D45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9FC8EB70-E8C3-42BE-84D8-1AB31D984167}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FC8EB70-E8C3-42BE-84D8-1AB31D984167}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FC8EB70-E8C3-42BE-84D8-1AB31D984167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A9C322-71FA-4817-838D-009238E08D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A9C322-71FA-4817-838D-009238E08D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A9C322-71FA-4817-838D-009238E08D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A9C322-71FA-4817-838D-009238E08D45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
