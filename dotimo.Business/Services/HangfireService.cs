@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace dotimo.Business.Services
@@ -102,28 +101,6 @@ namespace dotimo.Business.Services
                 Body = string.Format("<html><body> {0} is down at {1}. Please check it! </body></html>", watch.UrlString, DateTime.Now)
             };
             return notification;
-        }
-
-        public bool PingUrl(Watch watch)
-        {
-            try
-            {
-                const int timeout = 10000; // ms
-                var ping = new Ping();
-
-                var result = ping.SendPingAsync(watch.UrlString, timeout).Result;
-                if (result.Status != IPStatus.Success)
-                {
-                    _logger.LogInformation(string.Format("Ping Failed! URL: {0}  STATUS: {1}", watch.UrlString, result.Status));
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(string.Format("URL: {0}, ExceptionMessage: {1}", watch.UrlString, ex.Message));
-                throw;
-            }
-            return true;
         }
     }
 }
