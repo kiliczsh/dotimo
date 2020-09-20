@@ -1,6 +1,7 @@
 ﻿using dotimo.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace dotimo.Business.IServices
@@ -14,6 +15,8 @@ namespace dotimo.Business.IServices
         Task DeleteByIdAsync(Guid id);
 
         bool Exists(Guid guid);
+
+        IEnumerable<Watch> Find(Expression<Func<Watch, bool>> predicate);
 
         Task<IEnumerable<Watch>> GetAllAsync();
 

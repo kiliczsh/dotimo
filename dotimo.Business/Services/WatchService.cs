@@ -4,6 +4,7 @@ using dotimo.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace dotimo.Business.Services
@@ -47,6 +48,11 @@ namespace dotimo.Business.Services
         {
             var watches = _unitOfWork.GetRepository().Find(w => w.UserId == userId && w.IsActive).ToList();
             return watches ?? new List<Watch>();
+        }
+
+        public IEnumerable<Watch> Find(Expression<Func<Watch, bool>> predicate)
+        {
+            return _unitOfWork.GetRepository().Find(predicate);
         }
 
         public async Task<Watch> GetByGuidAsync(Guid guid)
