@@ -70,7 +70,7 @@ namespace dotimo.Business.Services
                     _logger.LogInformation(string.Format(" Hangfire Service | SendRequestAsync | Ping Failed! URL: {0}  STATUS: {1}",
                         watch.UrlString, response.StatusCode.ToString()));
                     isStatusCodeSuccess = false;
-                    var notification = CreateNotification();
+                    var notification = CreateNotification(watch);
                     _notificationService.Send(notification);
                 }
 
@@ -86,16 +86,22 @@ namespace dotimo.Business.Services
             catch (Exception ex)
             {
                 _logger.LogError(string.Format(" Hangfire Service | SendRequestAsync | Request Failed! URL: {0}, ExceptionMessage: {1}", watch.UrlString, ex.Message));
-                var notification = CreateNotification();
+                var notification = CreateNotification(watch);
                 _notificationService.Send(notification);
                 throw;
             }
             return true;
         }
 
-        private Notification CreateNotification()
+        private Notification CreateNotification(Watch watch)
         {
-            return new Notification();
+            var notification = new Notification
+            {
+                ToEmail = watch.Email,
+                Subject = string.Format("Dotimo Alert | {0} is DOWN! ", watch.Name),
+                Body = string.Format("<html><body> {0} is down at {1}. Please check it! </body></html>", watch.UrlString, DateTime.Now)
+            };
+            return notification;
         }
 
         public bool PingUrl(Watch watch)

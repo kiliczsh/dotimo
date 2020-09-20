@@ -12,7 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "MAIL_PASSWORD": "<password>",
+        "MAIL_PASSWORD": "<apppassword>",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MAIL_USERNAME": "<email>"
       }

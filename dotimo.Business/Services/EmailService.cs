@@ -20,27 +20,25 @@ namespace dotimo.Business.Services
         {
             try
             {
-                var credentials = new NetworkCredential(
-                    userName: Environment.GetEnvironmentVariable("MAIL_USERNAME"),
-                    password: Environment.GetEnvironmentVariable("MAIL_PASSWORD"));
+                var userName = Environment.GetEnvironmentVariable("MAIL_USERNAME");
+                var password = Environment.GetEnvironmentVariable("MAIL_PASSWORD");
 
-                SmtpClient mailClient = new SmtpClient
+                MailMessage mail = CreateMail(notification);
+                SmtpClient mailClient = new SmtpClient("smtp.gmail.com")
                 {
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    EnableSsl = true,
-                    Host = "smtp.gmail.com",
                     Port = 587,
-                    UseDefaultCredentials = false,
-                    Credentials = credentials
+                    Credentials = new NetworkCredential(userName, password),
+                    EnableSsl = true,
+                    Timeout = 10000
                 };
 
-                var mail = CreateMail(notification);
                 mailClient.Send(mail);
-                _logger.LogInformation(" NotificationService | Email sent!");
+
+                _logger.LogInformation(string.Format(" NotificationService | Email sent to {0}!", notification.ToEmail));
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(" NotificationService | Email failed!");
+                _logger.LogInformation(" NotificationService | Email failed! | Details: {0} ", ex.Message);
                 throw;
             }
         }
@@ -50,13 +48,12 @@ namespace dotimo.Business.Services
             var mail = new MailMessage
             {
                 From = new MailAddress(Environment.GetEnvironmentVariable("MAIL_USERNAME"), "Dotimo Alert"),
-                Subject = "Dotimo | Your website is DOWN!",
+                Subject = notification.Subject,
                 IsBodyHtml = true,
-                Body = "This mail sent by Dotimo to alert you!"
+                Body = notification.Body
             };
-            mail.To.Add("<email>");
+            mail.To.Add(notification.ToEmail);
             return mail;
-
         }
     }
 }

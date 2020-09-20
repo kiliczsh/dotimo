@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dotimo.Data.Models
+﻿namespace dotimo.Data.Models
 {
     public class Notification
     {
+        public string ToEmail { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public string ToPhone { get; set; }
     }
 }
